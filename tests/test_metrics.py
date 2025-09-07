@@ -12,4 +12,12 @@ def test_metrics_endpoint_available():
     with TestClient(app) as client:
         r = client.get("/metrics")
         assert r.status_code == 200
-        assert "requests" in r.text
+        body = r.text
+        # Request counters/histograms present (names vary by version)
+        assert (
+            "request_duration_seconds" in body
+            or "http_request_duration_seconds" in body
+            or "starlette_requests" in body
+        )
+        # Custom counter present
+        assert "rag_rerank_timeouts_total" in body

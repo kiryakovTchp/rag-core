@@ -105,6 +105,13 @@ jobs:
           python scripts/eval.py
           kill $APP_PID || true
 
+      - name: PyTest eval checks
+        if: always()
+        env:
+          ENABLE_METRICS: "false"
+          WARMUP_MODELS: "false"
+        run: pytest -m eval -q
+
       - name: Upload eval artifacts
         if: always()
         uses: actions/upload-artifact@v4

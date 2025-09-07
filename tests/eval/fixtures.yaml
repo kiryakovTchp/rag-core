@@ -1,6 +1,30 @@
 - query: "What is FastAPI?"
   expect:
     contains: "FastAPI"
-- query: "PDF contains Markdown?"
+- query: "Which framework is mentioned?"
+  expect:
+    contains: "framework"
+- query: "Is FastAPI a Python framework?"
+  expect:
+    contains: "Python"
+- query: "What format is mentioned along with PDF?"
   expect:
     contains: "Markdown"
+- query: "Find mention of PDF"
+  expect:
+    contains: "PDF"
+- query: "Does the sample mention Markdown?"
+  expect:
+    contains: "Markdown"
+- query: "What is described as a modern, fast web framework?"
+  expect:
+    contains: "FastAPI"
+- query: "Which language is used for building APIs?"
+  expect:
+    contains: "Python"
+- query: "Document mentions searches?"
+  expect:
+    contains: "search"
+- query: "Test mentions document"
+  expect:
+    contains: "document"
