@@ -1,0 +1,6 @@
+- query: "What is FastAPI?"
+  expect:
+    contains: "FastAPI"
+- query: "PDF contains Markdown?"
+  expect:
+    contains: "Markdown"
