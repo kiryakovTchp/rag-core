@@ -83,3 +83,27 @@ Eval
 - Run local eval against running API:
   python scripts/eval.py
 - Reports saved to `reports/` (CSV and summary.md). CI uploads as artifact.
+
+Verification
+- Prep:
+  - cp .env.example .env
+  - Set: `ENABLE_METRICS=true`, `HYBRID_ENABLED=true`, `HYBRID_WEIGHT=0.6`, `HYBRID_TOPN=50`
+  - docker compose up --build -d
+  - alembic -c db/alembic.ini upgrade head
+
+- Automated script (artifacts in `reports/verify_{ts}`):
+  bash scripts/verify.sh
+
+- Manual checks (examples):
+  - Health: curl -s :8000/healthz | jq .
+  - Metrics: curl -s :8000/metrics | head -n 50
+  - Ingest TXT: curl -F "file=@sample.txt;type=text/plain" :8000/ingest
+  - Query hybrid: curl -X POST :8000/query -H 'Content-Type: application/json' -d '{"query":"FastAPI","top_k":5,"hybrid":true}'
+
+SLO (MVP targets, no strict enforcement)
+- /query without rerank p95 ≤ 350ms; with rerank p95 ≤ 1.2s (topN=50)
+- /ingest TXT 1MB ≤ 2s; PDF 10MB ≤ 20s
+- 5xx ≤ 1% per hour; reranker timeouts ≤ 5% when rerank=true
+
+Security (MVP)
+- API key and CORS are not enabled by default; add in a follow-up iteration if required. Docker image runs as root in dev for simplicity.
